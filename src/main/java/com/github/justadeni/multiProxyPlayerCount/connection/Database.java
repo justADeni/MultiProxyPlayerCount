@@ -7,10 +7,10 @@ import java.util.concurrent.CompletableFuture;
 
 public interface Database {
 
-    public void add(Player player);
+    void add(Player player);
 
-    public void remove(Player player);
+    void remove(Player player);
 
-    public CompletableFuture<Set<PlayerData>> query();
+    CompletableFuture<Set<PlayerData>> query();
 
 }

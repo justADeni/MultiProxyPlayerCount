@@ -1,0 +1,51 @@
+name: Auto Tag, Build, and Release
+
+on:
+  push:
+    paths:
+      - 'pom.xml'
+      - 'src/**'
+  pull_request:
+    paths:
+      - 'pom.xml'
+      - 'src/**'
+
+jobs:
+  all:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Environment Variables
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          NAME=$(mvn help:evaluate -Dexpression=project.name -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "NAME=$NAME" >> $GITHUB_ENV
+
+      - name: Create Tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "${{ env.VERSION }}" -m "Release ${{ env.VERSION }}"
+          git push origin "${{ env.VERSION }}"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Maven
+        run: mvn -B package
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "target/${{ env.NAME }}-${{ env.VERSION }}.jar"
+          artifactErrorsFailBuild: true
+          generateReleaseNotes: true
+          makeLatest: true
+          tag: "${{ env.VERSION }}"

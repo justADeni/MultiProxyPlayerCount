@@ -13,7 +13,7 @@ public class PluginCommand {
 
     public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy) {
         LiteralCommandNode<CommandSource> helloNode = BrigadierCommand.literalArgumentBuilder("proxylist")
-                .requires(source -> source instanceof ConsoleCommandSource || source.hasPermission("mppc.use"))
+                .requires(source -> source instanceof ConsoleCommandSource || source.hasPermission("multiproxyplayercount.use"))
                 .executes(context -> {
                     Thread.ofVirtual().start(() -> {
                         CommandSource source = context.getSource();

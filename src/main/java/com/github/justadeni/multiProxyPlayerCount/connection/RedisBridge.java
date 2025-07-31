@@ -39,15 +39,7 @@ public class RedisBridge implements Database {
             try (Jedis jedis = pool.getResource()) {
                 Map<String, String> entries = jedis.hgetAll(REDIS_SET_KEY);
                 return entries.entrySet().stream()
-                        .map(entry -> {
-                            try {
-                                UUID uuid = UUID.fromString(entry.getKey());
-                                return new PlayerData(uuid, entry.getValue());
-                            } catch (IllegalArgumentException e) {
-                                return null;
-                            }
-                        })
-                        .filter(Objects::nonNull)
+                        .map(entry -> new PlayerData(UUID.fromString(entry.getKey()), entry.getValue()))
                         .collect(Collectors.toSet());
             }
         }, VIRTUAL_EXECUTOR);
