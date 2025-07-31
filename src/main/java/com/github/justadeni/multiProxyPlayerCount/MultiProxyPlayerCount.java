@@ -1,8 +1,13 @@
 package com.github.justadeni.multiProxyPlayerCount;
 
+import com.github.justadeni.multiProxyPlayerCount.connection.Database;
+import com.github.justadeni.multiProxyPlayerCount.connection.RedisBridge;
 import com.github.justadeni.multiProxyPlayerCount.listeners.PlayerJoinListener;
 import com.github.justadeni.multiProxyPlayerCount.listeners.PlayerLeaveListener;
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.BrigadierCommand;
+import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
@@ -30,7 +35,12 @@ public class MultiProxyPlayerCount {
 
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
-        server.getEventManager().register(this, new PlayerJoinListener());
-        server.getEventManager().register(this, new PlayerLeaveListener());
+        Database database = new RedisBridge();
+        server.getEventManager().register(this, new PlayerJoinListener(database));
+        server.getEventManager().register(this, new PlayerLeaveListener(database));
+        CommandManager commandManager = server.getCommandManager();
+        CommandMeta commandMeta = commandManager.metaBuilder("proxylist").plugin(this).build();
+        BrigadierCommand commandToRegister = PluginCommand.createBrigadierCommand(server);
+        commandManager.register(commandMeta, commandToRegister);
     }
 }
