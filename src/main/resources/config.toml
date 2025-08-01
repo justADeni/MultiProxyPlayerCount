@@ -1,9 +1,16 @@
-# Name of the proxy in separated command
-# Supports MiniMessage
-[proxy]
-name = "<gold>ChangeThisProxyNameInConfig</gold>"
+# Details for connecting to Redis DB
+# Changes will be applied only after server restart
+[connection]
+host = "url-here"
+port = 0000
+user = "username"
+password = "password123"
 
 # List command formatting using MiniMessage
+# Changes will be applied after config reload
 [format]
+# Name of the proxy in separated command
+# Supports MiniMessage
+name = "<gold>ChangeThisProxyNameInConfig</gold>"
 simple = "<gold>Online Players: </gold> <aqua><online_players></aqua>"
 detailed = "<proxy_name> <gold>: </gold> <aqua><online_players></aqua>"

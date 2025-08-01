@@ -38,7 +38,11 @@ public class PluginCommand {
                                 .map(PlayerData::playerName)
                                 .collect(Collectors.joining(", "));
 
-                        Component component = MiniMessage.miniMessage().deserialize(config.getSimpleFormat(), Placeholder.unparsed("online_players", csl));
+                        Component component = MiniMessage.miniMessage().deserialize(
+                                config.getSimpleFormat(),
+                                Placeholder.unparsed("online_players", csl)
+                        );
+
                         source.sendRichMessage(MiniMessage.miniMessage().serialize(component));
                     });
                     return Command.SINGLE_SUCCESS;

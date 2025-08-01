@@ -38,7 +38,27 @@ public class ConfigImpl implements Config {
 
     @Override
     public String getProxyIdentifier() {
-        return doc.get("proxy").asTable().get("name").asPrimitive().asString();
+        return doc.get("format").asTable().get("name").asPrimitive().asString();
+    }
+
+    @Override
+    public String getHost() {
+        return doc.get("connection").asTable().get("host").asPrimitive().asString();
+    }
+
+    @Override
+    public int getPort() {
+        return doc.get("connection").asTable().get("port").asPrimitive().asInteger();
+    }
+
+    @Override
+    public String getUser() {
+        return doc.get("connection").asTable().get("user").asPrimitive().asString();
+    }
+
+    @Override
+    public String getPassword() {
+        return doc.get("connection").asTable().get("password").asPrimitive().asString();
     }
 
     @Override

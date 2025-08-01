@@ -45,11 +45,23 @@ public class MultiProxyPlayerCount {
     public void onInitialize(ProxyInitializeEvent event) {
         Config config = new ConfigImpl(path, logger);
         Database database = new DatabaseImpl(config);
-        server.getEventManager().register(this, new PlayerJoinListener(database));
-        server.getEventManager().register(this, new PlayerLeaveListener(database));
-        CommandManager commandManager = server.getCommandManager();
-        CommandMeta commandMeta = commandManager.metaBuilder("proxylist").plugin(this).build();
-        BrigadierCommand commandToRegister = new PluginCommand(database, config).createBrigadierCommand(server);
-        commandManager.register(commandMeta, commandToRegister);
+        if (!database.connectionTest().join()) {
+            logger.warn("Connection to Redis DB failed; disabling the plugin. Reconfigure and restart server to apply changes.");
+            return;
+        }
+        database.connectionTest().thenAccept(result -> {
+            if (!result) {
+                logger.warn("Connection to Redis DB failed; disabling the plugin. Reconfigure and restart server to apply changes.");
+                return;
+            }
+            server.getScheduler().buildTask(this, () -> {
+                server.getEventManager().register(this, new PlayerJoinListener(database));
+                server.getEventManager().register(this, new PlayerLeaveListener(database));
+                CommandManager commandManager = server.getCommandManager();
+                CommandMeta commandMeta = commandManager.metaBuilder("proxylist").plugin(this).build();
+                BrigadierCommand commandToRegister = new PluginCommand(database, config).createBrigadierCommand(server);
+                commandManager.register(commandMeta, commandToRegister);
+            }).schedule();
+        });
     }
 }

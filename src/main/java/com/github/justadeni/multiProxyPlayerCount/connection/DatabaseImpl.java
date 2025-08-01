@@ -1,7 +1,6 @@
 package com.github.justadeni.multiProxyPlayerCount.connection;
 
 import com.github.justadeni.multiProxyPlayerCount.config.Config;
-import com.github.justadeni.multiProxyPlayerCount.config.ConfigImpl;
 import com.velocitypowered.api.proxy.Player;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -18,26 +17,47 @@ public class DatabaseImpl implements Database {
 
     private static final ExecutorService VIRTUAL_EXECUTOR = Executors.newVirtualThreadPerTaskExecutor();
     private static final String REDIS_SET_KEY = "multiproxyplayercount:online-players";
-    private static final JedisPool pool = new JedisPool("localhost", 6379);
 
     private final Config config;
+    private final JedisPool pool;
 
     public DatabaseImpl(Config config) {
         this.config = config;
+        pool = new JedisPool(
+                config.getHost(),
+                config.getPort(),
+                config.getUser(),
+                config.getPassword()
+        );
+    }
+
+    @Override
+    public CompletableFuture<Boolean> connectionTest() {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Jedis jedis = pool.getResource()) {
+                return "PONG".equals(jedis.ping());
+            } catch (Exception e) {
+                return false;
+            }
+        }, VIRTUAL_EXECUTOR);
     }
 
     @Override
     public void add(Player player) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.hset(REDIS_SET_KEY, player.getUniqueId().toString(), player.getUsername() + "," + config.getProxyIdentifier());
-        }
+        VIRTUAL_EXECUTOR.submit(() -> {
+            try (Jedis jedis = pool.getResource()) {
+                jedis.hset(REDIS_SET_KEY, player.getUniqueId().toString(), player.getUsername() + "," + config.getProxyIdentifier());
+            }
+        });
     }
 
     @Override
     public void remove(Player player) {
-        try (Jedis jedis = pool.getResource()) {
-            jedis.hdel(REDIS_SET_KEY, player.getUniqueId().toString());
-        }
+        VIRTUAL_EXECUTOR.submit(() -> {
+            try (Jedis jedis = pool.getResource()) {
+                jedis.hdel(REDIS_SET_KEY, player.getUniqueId().toString());
+            }
+        });
     }
 
     @Override
