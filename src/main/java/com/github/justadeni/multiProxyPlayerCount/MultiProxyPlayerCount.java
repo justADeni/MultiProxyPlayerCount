@@ -45,10 +45,6 @@ public class MultiProxyPlayerCount {
     public void onInitialize(ProxyInitializeEvent event) {
         Config config = new ConfigImpl(path, logger);
         Database database = new DatabaseImpl(config);
-        if (!database.connectionTest().join()) {
-            logger.warn("Connection to Redis DB failed; disabling the plugin. Reconfigure and restart server to apply changes.");
-            return;
-        }
         database.connectionTest().thenAccept(result -> {
             if (!result) {
                 logger.warn("Connection to Redis DB failed; disabling the plugin. Reconfigure and restart server to apply changes.");
