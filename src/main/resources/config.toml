@@ -1,2 +1,9 @@
+# Name of the proxy in separated command
+# Supports MiniMessage
 [proxy]
 name = "ChangeThisProxyNameInConfig"
+
+# List command formatting using MiniMessage
+[format]
+simple = "<gold>Online Players: </gold> <aqua><online_players></aqua>"
+detailed = "<proxy_name> <gold>: </gold> <aqua><online_players></aqua>"

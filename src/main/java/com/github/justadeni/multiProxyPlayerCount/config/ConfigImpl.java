@@ -42,6 +42,16 @@ public class ConfigImpl implements Config {
     }
 
     @Override
+    public String getSimpleFormat() {
+        return doc.get("format").asTable().get("simple").asPrimitive().asString();
+    }
+
+    @Override
+    public String getDetailedFormat() {
+        return doc.get("format").asTable().get("detailed").asPrimitive().asString();
+    }
+
+    @Override
     public void reload() {
         try {
             doc = jtoml.read(this.path);

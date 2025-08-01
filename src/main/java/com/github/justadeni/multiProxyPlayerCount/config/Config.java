@@ -4,6 +4,10 @@ public interface Config {
 
     String getProxyIdentifier();
 
+    String getSimpleFormat();
+
+    String getDetailedFormat();
+
     void reload();
 
 }
