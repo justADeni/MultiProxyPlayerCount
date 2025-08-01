@@ -1,5 +1,6 @@
-package com.github.justadeni.multiProxyPlayerCount;
+package com.github.justadeni.multiProxyPlayerCount.command;
 
+import com.github.justadeni.multiProxyPlayerCount.config.Config;
 import com.github.justadeni.multiProxyPlayerCount.connection.Database;
 import com.github.justadeni.multiProxyPlayerCount.connection.PlayerData;
 import com.mojang.brigadier.Command;
@@ -16,9 +17,11 @@ import java.util.Set;
 public class PluginCommand {
 
     private final Database database;
+    private final Config config;
 
-    public PluginCommand(Database database) {
+    public PluginCommand(Database database, Config config) {
         this.database = database;
+        this.config = config;
     }
 
     public BrigadierCommand createBrigadierCommand(final ProxyServer proxy) {

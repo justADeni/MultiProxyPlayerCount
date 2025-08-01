@@ -1,11 +1,9 @@
 package com.github.justadeni.multiProxyPlayerCount.config;
 
-public class Config {
+public interface Config {
 
-    private Config() {
-        PROXY_IDENTIFIER = ""; //TODO: add toml file loading and unloading in this singleton
-    }
+    String getProxyIdentifier();
 
-    public final String PROXY_IDENTIFIER;
+    void reload();
 
 }

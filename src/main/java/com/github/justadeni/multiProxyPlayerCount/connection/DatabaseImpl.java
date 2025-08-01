@@ -1,11 +1,12 @@
 package com.github.justadeni.multiProxyPlayerCount.connection;
 
+import com.github.justadeni.multiProxyPlayerCount.config.Config;
+import com.github.justadeni.multiProxyPlayerCount.config.ConfigImpl;
 import com.velocitypowered.api.proxy.Player;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -13,16 +14,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class RedisBridge implements Database {
+public class DatabaseImpl implements Database {
 
     private static final ExecutorService VIRTUAL_EXECUTOR = Executors.newVirtualThreadPerTaskExecutor();
     private static final String REDIS_SET_KEY = "multiproxyplayercount:online-players";
     private static final JedisPool pool = new JedisPool("localhost", 6379);
 
+    private final Config config;
+
+    public DatabaseImpl(Config config) {
+        this.config = config;
+    }
+
     @Override
     public void add(Player player) {
         try (Jedis jedis = pool.getResource()) {
-            jedis.hset(REDIS_SET_KEY, player.getUniqueId().toString(), player.getUsername());
+            jedis.hset(REDIS_SET_KEY, player.getUniqueId().toString(), player.getUsername() + "," + config.getProxyIdentifier());
         }
     }
 
