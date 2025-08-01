@@ -1,7 +1,7 @@
 # Name of the proxy in separated command
 # Supports MiniMessage
 [proxy]
-name = "ChangeThisProxyNameInConfig"
+name = "<gold>ChangeThisProxyNameInConfig</gold>"
 
 # List command formatting using MiniMessage
 [format]
