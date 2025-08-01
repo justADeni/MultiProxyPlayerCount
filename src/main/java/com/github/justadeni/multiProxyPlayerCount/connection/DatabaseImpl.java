@@ -68,7 +68,7 @@ public class DatabaseImpl implements Database {
                 return entries.entrySet().stream()
                         .map(entry -> {
                             UUID uuid = UUID.fromString(entry.getKey());
-                            String[] key = entry.getValue().split(",", 1);
+                            String[] key = entry.getValue().split(",", 2);
                             return new PlayerData(uuid, key[0], key[1]);
                         })
                         .collect(Collectors.toSet());
