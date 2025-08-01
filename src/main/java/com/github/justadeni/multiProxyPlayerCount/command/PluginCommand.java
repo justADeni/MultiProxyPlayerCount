@@ -79,7 +79,11 @@ public class PluginCommand {
                 .then(BrigadierCommand.literalArgumentBuilder("reload")
                         .requires(source -> source.hasPermission("multiproxyplayercount.reload"))
                         .executes(context -> {
-                            Thread.ofVirtual().start(config::reload);
+                            Thread.ofVirtual().start(() -> {
+                                config.reload();
+                                CommandSource source = context.getSource();
+                                source.sendRichMessage("<green>Config reloaded successfully.</green>");
+                            });
                             return Command.SINGLE_SUCCESS;
                         })
                 )

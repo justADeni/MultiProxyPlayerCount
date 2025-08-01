@@ -54,6 +54,7 @@ public class MultiProxyPlayerCount {
                 logger.warn("Connection to Redis DB failed; disabling the plugin. Reconfigure and restart server to apply changes.");
                 return;
             }
+            logger.info("Connection to Redis DB successful.");
             server.getScheduler().buildTask(this, () -> {
                 server.getEventManager().register(this, new PlayerJoinListener(database));
                 server.getEventManager().register(this, new PlayerLeaveListener(database));
