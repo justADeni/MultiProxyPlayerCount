@@ -1,6 +1,7 @@
 name: Auto Tag, Build, and Release
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'pom.xml'
