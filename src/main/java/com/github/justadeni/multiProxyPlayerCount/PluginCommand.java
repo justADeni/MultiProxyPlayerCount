@@ -1,5 +1,7 @@
 package com.github.justadeni.multiProxyPlayerCount;
 
+import com.github.justadeni.multiProxyPlayerCount.connection.Database;
+import com.github.justadeni.multiProxyPlayerCount.connection.PlayerData;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.velocitypowered.api.command.BrigadierCommand;
@@ -9,15 +11,24 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import java.util.Set;
+
 public class PluginCommand {
 
-    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy) {
+    private final Database database;
+
+    public PluginCommand(Database database) {
+        this.database = database;
+    }
+
+    public BrigadierCommand createBrigadierCommand(final ProxyServer proxy) {
         LiteralCommandNode<CommandSource> helloNode = BrigadierCommand.literalArgumentBuilder("proxylist")
                 .requires(source -> source instanceof ConsoleCommandSource || source.hasPermission("multiproxyplayercount.use"))
                 .executes(context -> {
                     Thread.ofVirtual().start(() -> {
                         CommandSource source = context.getSource();
-
+                        Set<PlayerData> data = database.query().join();
+                        //TODO: handle parsing and displaying the data here
                         Component message = Component.text("Hello World", NamedTextColor.AQUA);
                         source.sendMessage(message);
                     });

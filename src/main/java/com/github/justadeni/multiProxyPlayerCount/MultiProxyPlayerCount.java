@@ -40,7 +40,7 @@ public class MultiProxyPlayerCount {
         server.getEventManager().register(this, new PlayerLeaveListener(database));
         CommandManager commandManager = server.getCommandManager();
         CommandMeta commandMeta = commandManager.metaBuilder("proxylist").plugin(this).build();
-        BrigadierCommand commandToRegister = PluginCommand.createBrigadierCommand(server);
+        BrigadierCommand commandToRegister = new PluginCommand(database).createBrigadierCommand(server);
         commandManager.register(commandMeta, commandToRegister);
     }
 }
