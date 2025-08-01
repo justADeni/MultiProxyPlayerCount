@@ -25,8 +25,8 @@ public class ConfigImpl implements Config {
         this.logger = logger;
         if (Files.notExists(this.path)) {
             try (InputStream in = ConfigImpl.class.getResourceAsStream("config.toml")) {
-                Files.createDirectories(path.getParent());
-                Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
+                Files.createDirectories(this.path.getParent());
+                Files.copy(in, this.path, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 logger.error("Error while copying config to data directory. Printing stack trace.");
                 Arrays.stream(e.getStackTrace()).forEach(s -> logger.warn(s.toString()));
