@@ -38,7 +38,20 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: 'maven'
+
+      - name: Extract dependencies block and hash it
+        id: hash
+        run: |
+          awk '/<dependencies>/,/<\/dependencies>/' pom.xml > pom.dependencies.xml
+          echo "hash=$(sha256sum pom.dependencies.xml | cut -d " " -f1)" >> $GITHUB_OUTPUT
+
+      - name: Cache Maven repo
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ steps.hash.outputs.hash }}
+          restore-keys: |
+            maven-${{ runner.os }}-
 
       - name: Build with Maven
         run: mvn -B package
