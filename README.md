@@ -34,7 +34,7 @@ A simple and lightweight Velocity plugin to show player lists across multiple pr
 # Changes will be applied only after server restart
 [connection]
 host = "url-here"
-port = 0000
+port = 1111
 user = "username"
 password = "password123"
 
