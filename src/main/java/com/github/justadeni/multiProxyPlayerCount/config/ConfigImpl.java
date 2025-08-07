@@ -1,5 +1,6 @@
 package com.github.justadeni.multiProxyPlayerCount.config;
 
+import com.github.justadeni.multiProxyPlayerCount.MultiProxyPlayerCount;
 import io.github.wasabithumb.jtoml.JToml;
 import io.github.wasabithumb.jtoml.document.TomlDocument;
 import io.github.wasabithumb.jtoml.except.TomlException;
@@ -24,7 +25,7 @@ public class ConfigImpl implements Config {
         this.path = path.resolve("config.toml");
         this.logger = logger;
         if (Files.notExists(this.path)) {
-            try (InputStream in = ConfigImpl.class.getResourceAsStream("config.toml")) {
+            try (InputStream in = ConfigImpl.class.getResourceAsStream("/config.toml")) {
                 Files.createDirectories(this.path.getParent());
                 Files.copy(in, this.path, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {

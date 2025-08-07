@@ -1,0 +1,6 @@
+{
+  "id": "multiproxyplayercount",
+  "name": "MultiProxyPlayerCount",
+  "version": "0.1.6",
+  "main": "com.github.justadeni.multiProxyPlayerCount.MultiProxyPlayerCount"
+}

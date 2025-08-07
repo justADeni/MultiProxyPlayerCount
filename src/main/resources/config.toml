@@ -2,7 +2,7 @@
 # Changes will be applied only after server restart
 [connection]
 host = "url-here"
-port = 0000
+port = 1111
 user = "username"
 password = "password123"
 

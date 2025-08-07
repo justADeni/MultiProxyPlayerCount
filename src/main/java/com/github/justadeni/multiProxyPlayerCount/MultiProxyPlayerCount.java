@@ -23,7 +23,7 @@ import java.nio.file.Path;
 @Plugin(
     id = "multiproxyplayercount",
     name = "MultiProxyPlayerCount",
-    version = "0.0.1",
+    version = "0.1.6",
     description = "Plugin that allows multiple proxy networks to share a player list between them.",
     url = "https://github.com/justADeni/MultiProxyPlayerCount",
     authors = {"justADeni"}
