@@ -64,7 +64,7 @@ public class PluginCommand {
                                         .entrySet().stream()
                                         .map(entry -> {
                                             Component component = MiniMessage.miniMessage().deserialize(format, TagResolver.resolver(
-                                                    Placeholder.unparsed("proxy_name", entry.getKey()),
+                                                    Placeholder.parsed("proxy_name", entry.getKey()),
                                                     Placeholder.unparsed("online_players", entry.getValue())
                                             ));
                                             return MiniMessage.miniMessage().serialize(component);
