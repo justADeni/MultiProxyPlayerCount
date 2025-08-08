@@ -30,12 +30,17 @@ A simple and lightweight Velocity plugin to show player lists across multiple pr
 **File:** `plugins/MultiProxyPlayerCount/config.toml`
 
 ```toml
+# Changes will be applied only after server restart
+[command]
+base = "proxylist"
+detailed = "detailed"
+
 # Details for connecting to Redis DB
 # Changes will be applied only after server restart
 [connection]
-host = "url-here"
+host = "url-without-http/s-here"
 port = 1111
-user = "username"
+user = "default"
 password = "password123"
 
 # List command formatting using MiniMessage
