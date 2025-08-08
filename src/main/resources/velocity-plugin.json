@@ -1,6 +1,9 @@
 {
-  "id": "multiproxyplayercount",
-  "name": "MultiProxyPlayerCount",
-  "version": "0.1.6",
+  "id": "${project.artifactId}",
+  "name": "${project.name}",
+  "version": "${project.version}",
+  "description": "${project.description}",
+  "url": "${project.url}",
+  "authors": ["${author}"],
   "main": "com.github.justadeni.multiProxyPlayerCount.MultiProxyPlayerCount"
 }

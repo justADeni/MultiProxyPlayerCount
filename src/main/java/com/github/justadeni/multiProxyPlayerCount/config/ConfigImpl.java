@@ -38,6 +38,16 @@ public class ConfigImpl implements Config {
     }
 
     @Override
+    public String getBaseCommand() {
+        return doc.get("command").asTable().get("base").asPrimitive().asString();
+    }
+
+    @Override
+    public String getDetailedCommand() {
+        return doc.get("command").asTable().get("detailed").asPrimitive().asString();
+    }
+
+    @Override
     public String getProxyIdentifier() {
         return doc.get("format").asTable().get("name").asPrimitive().asString();
     }

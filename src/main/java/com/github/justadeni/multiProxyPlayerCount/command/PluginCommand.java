@@ -26,7 +26,7 @@ public class PluginCommand {
     }
 
     public BrigadierCommand createBrigadierCommand(final ProxyServer proxy) {
-        LiteralCommandNode<CommandSource> mainNode = BrigadierCommand.literalArgumentBuilder("proxylist")
+        LiteralCommandNode<CommandSource> mainNode = BrigadierCommand.literalArgumentBuilder(config.getBaseCommand())
                 .requires(source -> source.hasPermission("multiproxyplayercount.list"))
                 .executes(context -> {
                     Thread.ofVirtual().start(() -> {
@@ -47,7 +47,7 @@ public class PluginCommand {
                     });
                     return Command.SINGLE_SUCCESS;
                 })
-                .then(BrigadierCommand.literalArgumentBuilder("detailed")
+                .then(BrigadierCommand.literalArgumentBuilder(config.getDetailedCommand())
                         .requires(source -> source.hasPermission("multiproxyplayercount.detailed"))
                         .executes(context -> {
                             Thread.ofVirtual().start(() -> {

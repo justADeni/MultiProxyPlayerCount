@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import java.nio.file.Path;
 
 @Plugin(
-    id = "multiproxyplayercount",
-    name = "MultiProxyPlayerCount",
-    version = "0.1.6",
-    description = "Plugin that allows multiple proxy networks to share a player list between them.",
-    url = "https://github.com/justADeni/MultiProxyPlayerCount",
-    authors = {"justADeni"}
+    id = "${project.artifactId}",
+    name = "${project.name}",
+    version = "${project.version}",
+    description = "${project.description}",
+    url = "${project.url}",
+    authors = {"${author}"}
 )
 public class MultiProxyPlayerCount {
 
@@ -55,7 +55,7 @@ public class MultiProxyPlayerCount {
                 server.getEventManager().register(this, new PlayerJoinListener(database));
                 server.getEventManager().register(this, new PlayerLeaveListener(database));
                 CommandManager commandManager = server.getCommandManager();
-                CommandMeta commandMeta = commandManager.metaBuilder("proxylist").plugin(this).build();
+                CommandMeta commandMeta = commandManager.metaBuilder(config.getBaseCommand()).plugin(this).build();
                 BrigadierCommand commandToRegister = new PluginCommand(database, config).createBrigadierCommand(server);
                 commandManager.register(commandMeta, commandToRegister);
             }).schedule();
