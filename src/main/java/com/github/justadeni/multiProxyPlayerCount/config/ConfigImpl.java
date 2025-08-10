@@ -1,9 +1,6 @@
 package com.github.justadeni.multiProxyPlayerCount.config;
 
-import com.github.justadeni.multiProxyPlayerCount.MultiProxyPlayerCount;
-import io.github.wasabithumb.jtoml.JToml;
-import io.github.wasabithumb.jtoml.document.TomlDocument;
-import io.github.wasabithumb.jtoml.except.TomlException;
+import com.moandjiezana.toml.Toml;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -15,19 +12,17 @@ import java.util.Arrays;
 
 public class ConfigImpl implements Config {
 
-    private static final JToml jtoml = JToml.jToml();
-
     private final Logger logger;
     private final Path path;
-    private TomlDocument doc;
+    private Toml toml;
 
     public ConfigImpl(Path path, Logger logger) {
         this.path = path.resolve("config.toml");
         this.logger = logger;
         if (Files.notExists(this.path)) {
-            try (InputStream in = ConfigImpl.class.getResourceAsStream("/config.toml")) {
+            try (InputStream is = ConfigImpl.class.getResourceAsStream("/config.toml")) {
                 Files.createDirectories(this.path.getParent());
-                Files.copy(in, this.path, StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(is, this.path, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 logger.error("Error while copying config to data directory. Printing stack trace.");
                 Arrays.stream(e.getStackTrace()).forEach(s -> logger.warn(s.toString()));
@@ -39,54 +34,54 @@ public class ConfigImpl implements Config {
 
     @Override
     public String getBaseCommand() {
-        return doc.get("command").asTable().get("base").asPrimitive().asString();
+        return toml.getTable("command").getString("base");
     }
 
     @Override
     public String getDetailedCommand() {
-        return doc.get("command").asTable().get("detailed").asPrimitive().asString();
+        return toml.getTable("command").getString("detailed");
     }
 
     @Override
     public String getProxyIdentifier() {
-        return doc.get("format").asTable().get("name").asPrimitive().asString();
+        return toml.getTable("format").getString("name");
     }
 
     @Override
     public String getHost() {
-        return doc.get("connection").asTable().get("host").asPrimitive().asString();
+        return toml.getTable("connection").getString("host");
     }
 
     @Override
     public int getPort() {
-        return doc.get("connection").asTable().get("port").asPrimitive().asInteger();
+        return Math.toIntExact(toml.getTable("connection").getLong("port"));
     }
 
     @Override
     public String getUser() {
-        return doc.get("connection").asTable().get("user").asPrimitive().asString();
+        return toml.getTable("connection").getString("user");
     }
 
     @Override
     public String getPassword() {
-        return doc.get("connection").asTable().get("password").asPrimitive().asString();
+        return toml.getTable("connection").getString("password");
     }
 
     @Override
     public String getSimpleFormat() {
-        return doc.get("format").asTable().get("simple").asPrimitive().asString();
+        return toml.getTable("format").getString("simple");
     }
 
     @Override
     public String getDetailedFormat() {
-        return doc.get("format").asTable().get("detailed").asPrimitive().asString();
+        return toml.getTable("format").getString("detailed");
     }
 
     @Override
     public void reload() {
-        try {
-            doc = jtoml.read(this.path);
-        } catch (TomlException e) {
+        try (InputStream is = Files.newInputStream(path)) {
+            toml = toml.read(is);
+        } catch (IOException e) {
             logger.error("Error while reading config. Printing stack trace.");
             Arrays.stream(e.getStackTrace()).forEach(s -> logger.warn(s.toString()));
         }
